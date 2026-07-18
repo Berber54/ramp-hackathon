@@ -7,7 +7,7 @@ export type LLMMessage = {
 };
 
 const DEFAULT_BASE_URL = "https://api.openai.com/v1";
-const DEFAULT_MODEL = "gpt-4o";
+const DEFAULT_MODEL = "gpt-5.5";
 
 export function llmConfigured(): boolean {
   return !!process.env.OPENAI_API_KEY;
@@ -19,6 +19,11 @@ function baseUrl(): string {
 
 function model(): string {
   return process.env.OPENAI_MODEL || DEFAULT_MODEL;
+}
+
+/** GPT-5 / o-series reasoning models reject custom temperature (only default 1). */
+function supportsTemperature(modelName: string): boolean {
+  return !/^(gpt-5|o1|o3|o4)/i.test(modelName);
 }
 
 export class LLMError extends Error {
@@ -45,11 +50,16 @@ export async function callLLM(
     throw new LLMError("OPENAI_API_KEY is not set.", 500);
   }
 
+  const modelName = model();
   const body: Record<string, unknown> = {
-    model: model(),
+    model: modelName,
     messages,
-    temperature,
   };
+  // Reasoning models (gpt-5.5, etc.) only accept the default temperature — sending
+  // 0.9 would 400. Older chat models still get the creative roast setting.
+  if (supportsTemperature(modelName)) {
+    body.temperature = temperature;
+  }
   if (json) {
     body.response_format = { type: "json_object" };
   }

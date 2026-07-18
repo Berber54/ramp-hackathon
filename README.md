@@ -35,7 +35,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | Var | Required | Notes |
 |---|---|---|
 | `OPENAI_API_KEY` | for real verdicts | Falls back to mock data if unset. |
-| `OPENAI_MODEL` | no | Defaults to `gpt-4o`. |
+| `OPENAI_MODEL` | no | Defaults to `gpt-5.5`. |
 | `OPENAI_BASE_URL` | no | Any OpenAI-compatible endpoint (fallback provider). |
 | `NEXT_PUBLIC_APP_URL` | no | Absolute URL for the booth QR; defaults to the current origin. |
 

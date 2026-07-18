@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Delulu Detector — Roast my DMs",
+  "version": "0.1.0",
+  "description": "Grab the Instagram DM thread you're viewing and get roasted by Delulu Detector.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Am I delusional?"
+  },
+  "permissions": ["activeTab", "tabs", "storage"],
+  "host_permissions": [
+    "https://www.instagram.com/*",
+    "https://instagram.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.instagram.com/*", "https://instagram.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
